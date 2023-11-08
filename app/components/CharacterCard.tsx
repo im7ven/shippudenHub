@@ -5,6 +5,8 @@ import villageIcon from "../images/village.png";
 import Expandable from "./Expandable";
 import { useCharacter } from "../context/CharacterContext";
 import { Neuton } from "next/font/google";
+import { Character } from "@prisma/client";
+import { motion } from "framer-motion";
 
 const neuton = Neuton({
   subsets: ["latin"],
@@ -220,57 +222,73 @@ const NatureLabel = styled.p`
   margin: 0;
 `;
 
-const CharacterCard = () => {
-  const { selectedCharacter } = useCharacter();
+interface Props {
+  initialCharacter: Character;
+}
+
+const CharacterCard = ({ initialCharacter }: Props) => {
+  const { selectedCharacter, animate } = useCharacter();
+  const renderedCharacter = selectedCharacter
+    ? selectedCharacter
+    : initialCharacter;
+
   return (
-    <CardContainer>
-      <CharacterImage src={selectedCharacter?.image} />
-      <CardContent>
-        <CardHeader>
-          <CharacterName className={neuton.className}>
-            {selectedCharacter?.name}
-          </CharacterName>
-          <StatusOverline
-            className={selectedCharacter?.status ? "" : "deceased"}
-          >
-            {selectedCharacter?.status ? "Alive" : "Deceased"}
-          </StatusOverline>
-        </CardHeader>
-        <StatWrapper>
-          <div>
-            <StatLabel>Overall</StatLabel>
-            <Stat>{selectedCharacter?.overall}</Stat>
-          </div>
-          <div>
-            <StatLabel>IQ</StatLabel>
-            <Stat>{selectedCharacter?.iq}</Stat>
-          </div>
-          <div>
-            <StatLabel>Abilities</StatLabel>
-            <Stat>{selectedCharacter?.abilities}</Stat>
-          </div>
-        </StatWrapper>
-        <VillageContainer>
-          {/* <VillageIcon src={villageIcon} /> */}
-          <Village>{selectedCharacter?.village}</Village>
-        </VillageContainer>
-        <Expandable
-          maxChars={260}
-          description={selectedCharacter ? selectedCharacter.description : ""}
-        />
-      </CardContent>
-      <CardFooter>
-        <StatLabel className="footer">Nature Transformations</StatLabel>
-        <NatureWrapper>
-          {selectedCharacter?.natureIcons.map((icon, index) => (
-            <NatureGroup key={index}>
-              <NatureIcon src={icon} />
-              <NatureLabel>{selectedCharacter.natureLabels[index]}</NatureLabel>
-            </NatureGroup>
-          ))}
-        </NatureWrapper>
-      </CardFooter>
-    </CardContainer>
+    <motion.div
+      initial={{ opacity: 0, x: -100 }}
+      animate={animate ? { opacity: 1, x: 0 } : {}}
+      transition={{ duration: 0.4 }}
+    >
+      <CardContainer>
+        <CharacterImage src={renderedCharacter?.image} />
+        <CardContent>
+          <CardHeader>
+            <CharacterName className={neuton.className}>
+              {renderedCharacter?.name}
+            </CharacterName>
+            <StatusOverline
+              className={renderedCharacter?.status ? "" : "deceased"}
+            >
+              {renderedCharacter?.status ? "Alive" : "Deceased"}
+            </StatusOverline>
+          </CardHeader>
+          <StatWrapper>
+            <div>
+              <StatLabel>Overall</StatLabel>
+              <Stat>{renderedCharacter?.overall}</Stat>
+            </div>
+            <div>
+              <StatLabel>IQ</StatLabel>
+              <Stat>{renderedCharacter?.iq}</Stat>
+            </div>
+            <div>
+              <StatLabel>Abilities</StatLabel>
+              <Stat>{renderedCharacter?.abilities}</Stat>
+            </div>
+          </StatWrapper>
+          <VillageContainer>
+            {/* <VillageIcon src={villageIcon} /> */}
+            <Village>{renderedCharacter?.village}</Village>
+          </VillageContainer>
+          <Expandable
+            maxChars={260}
+            description={renderedCharacter ? renderedCharacter.description : ""}
+          />
+        </CardContent>
+        <CardFooter>
+          <StatLabel className="footer">Nature Transformations</StatLabel>
+          <NatureWrapper>
+            {renderedCharacter?.natureIcons.map((icon, index) => (
+              <NatureGroup key={index}>
+                <NatureIcon src={icon} />
+                <NatureLabel>
+                  {renderedCharacter.natureLabels[index]}
+                </NatureLabel>
+              </NatureGroup>
+            ))}
+          </NatureWrapper>
+        </CardFooter>
+      </CardContainer>
+    </motion.div>
   );
 };
 

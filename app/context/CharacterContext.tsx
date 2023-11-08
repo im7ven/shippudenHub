@@ -1,10 +1,17 @@
 "use client";
 import { Character } from "@/types/character";
-import { useContext, createContext, useState, ReactNode } from "react";
+import {
+  useContext,
+  createContext,
+  useState,
+  ReactNode,
+  useEffect,
+} from "react";
 
 interface CharacterContextValue {
   selectedCharacter: Character | null;
   handleSelectedCharacter: (character: Character) => void;
+  animate: boolean;
 }
 
 interface Props {
@@ -21,12 +28,23 @@ export const CharacterContextProvider = ({ children }: Props) => {
   );
 
   const handleSelectedCharacter = (character: Character) => {
-    setSelectedCharacter(character);
+    setAnimate(false); // Disable animation
+    setTimeout(() => {
+      setSelectedCharacter(character);
+    }, 400);
   };
+
+  const [animate, setAnimate] = useState(true);
+  useEffect(() => {
+    if (selectedCharacter) {
+      setTimeout(() => setAnimate(true), 100);
+    }
+  }, [selectedCharacter]);
 
   const characterContextValue: CharacterContextValue = {
     selectedCharacter,
     handleSelectedCharacter,
+    animate,
   };
 
   return (

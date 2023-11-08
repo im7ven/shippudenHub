@@ -1,7 +1,16 @@
-import Image from "next/image";
+import { Character } from "@/types/character";
+import CharacterCard from "./components/CharacterCard";
+import CharacterSelection from "./components/CharacterSelection";
 
-export default function Home() {
+export default async function Home() {
+  const res = await fetch("http://localhost:3000/api/characters");
+  const characters: Character[] = await res.json();
+  const initialCharacter = characters[0];
+
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24"></main>
+    <main>
+      <CharacterCard initialCharacter={initialCharacter} />
+      <CharacterSelection />
+    </main>
   );
 }
