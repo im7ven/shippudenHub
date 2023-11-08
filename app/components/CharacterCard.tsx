@@ -1,6 +1,15 @@
+"use client";
+
 import styled from "styled-components";
 import villageIcon from "../images/village.png";
 import Expandable from "./Expandable";
+import { useCharacter } from "../context/CharacterContext";
+import { Neuton } from "next/font/google";
+
+const neuton = Neuton({
+  subsets: ["latin"],
+  weight: ["800"],
+});
 
 const CardContainer = styled.section`
   display: flex;
@@ -72,7 +81,6 @@ const CardHeader = styled.header`
 
 const StatusOverline = styled.p`
   font-size: 1.2rem;
-  font-family: "Gabarito", sans-serif;
   letter-spacing: 1.3rem;
   text-transform: uppercase;
   font-weight: 700;
@@ -93,7 +101,6 @@ const StatusOverline = styled.p`
 `;
 
 const CharacterName = styled.h2`
-  font-family: "Neuton", serif;
   font-weight: 900;
   font-size: 3rem;
   margin: 0;
@@ -127,7 +134,6 @@ const VillageIcon = styled.img`
 
 const Village = styled.p`
   margin: 0;
-  font-family: "Gabarito", sans-serif;
   font-size: 1.8rem;
   color: #cdbef0;
 
@@ -145,7 +151,6 @@ const StatWrapper = styled.div`
 const StatLabel = styled.h3`
   font-size: 1.8rem;
   font-weight: 700;
-  font-family: "Gabarito", sans-serif;
   margin: 0;
   color: #ff3923;
   text-align: center;
@@ -171,7 +176,6 @@ const Stat = styled.p`
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   margin: 0;
-  font-family: "Gabarito", sans-serif;
   font-weight: 700;
 
   @media screen and (min-width: 550px) {
@@ -214,53 +218,54 @@ const NatureIcon = styled.img`
 const NatureLabel = styled.p`
   font-size: 1.5rem;
   margin: 0;
-  font-family: "Gabarito", sans-serif;
 `;
 
-const CharacterCard = async () => {
-  const res = await fetch("http://localhost:3000/api/characters");
-  const characters: Character[] = await res.json();
-
+const CharacterCard = () => {
+  const { selectedCharacter } = useCharacter();
   return (
     <CardContainer>
-      <CharacterImage src={displayCard?.image} />
+      <CharacterImage src={selectedCharacter?.image} />
       <CardContent>
         <CardHeader>
-          <CharacterName>{displayCard?.name}</CharacterName>
-          <StatusOverline className={displayCard?.status ? "" : "deceased"}>
-            {displayCard?.status ? "Alive" : "Deceased"}
+          <CharacterName className={neuton.className}>
+            {selectedCharacter?.name}
+          </CharacterName>
+          <StatusOverline
+            className={selectedCharacter?.status ? "" : "deceased"}
+          >
+            {selectedCharacter?.status ? "Alive" : "Deceased"}
           </StatusOverline>
         </CardHeader>
         <StatWrapper>
           <div>
             <StatLabel>Overall</StatLabel>
-            <Stat>{displayCard?.overall}</Stat>
+            <Stat>{selectedCharacter?.overall}</Stat>
           </div>
           <div>
             <StatLabel>IQ</StatLabel>
-            <Stat>{displayCard?.iq}</Stat>
+            <Stat>{selectedCharacter?.iq}</Stat>
           </div>
           <div>
             <StatLabel>Abilities</StatLabel>
-            <Stat>{displayCard?.abilities}</Stat>
+            <Stat>{selectedCharacter?.abilities}</Stat>
           </div>
         </StatWrapper>
         <VillageContainer>
-          <VillageIcon src={villageIcon} />
-          <Village>{displayCard?.village}</Village>
+          {/* <VillageIcon src={villageIcon} /> */}
+          <Village>{selectedCharacter?.village}</Village>
         </VillageContainer>
         <Expandable
           maxChars={260}
-          decription={displayCard ? displayCard.description : ""}
+          description={selectedCharacter ? selectedCharacter.description : ""}
         />
       </CardContent>
       <CardFooter>
         <StatLabel className="footer">Nature Transformations</StatLabel>
         <NatureWrapper>
-          {displayCard?.natureIcons.map((icon, index) => (
+          {selectedCharacter?.natureIcons.map((icon, index) => (
             <NatureGroup key={index}>
               <NatureIcon src={icon} />
-              <NatureLabel>{displayCard.natureLabels[index]}</NatureLabel>
+              <NatureLabel>{selectedCharacter.natureLabels[index]}</NatureLabel>
             </NatureGroup>
           ))}
         </NatureWrapper>
