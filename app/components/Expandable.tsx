@@ -49,7 +49,8 @@ const Expandable = ({ maxChars, description }: Props) => {
   return (
     <>
       <ExpandableText>
-        {text}...
+        {text}
+        {isExpanded ? "" : "..."}
         <ExpandableBtn onClick={() => setIsExpanded(!isExpanded)}>
           {isExpanded ? "See Less" : "See more"}
         </ExpandableBtn>
