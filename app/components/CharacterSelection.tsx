@@ -99,7 +99,7 @@ const CharacterSelection = () => {
 
   useEffect(() => {
     const fetchCharacterIcons = async () => {
-      const res = await fetch("http://localhost:3000/api/characters");
+      const res = await fetch("/api/characters");
       const characterIcons: Character[] = await res.json();
       setCharacterIcons(characterIcons);
     };
