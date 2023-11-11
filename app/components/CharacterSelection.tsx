@@ -4,8 +4,8 @@ import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useCharacter } from "../context/CharacterContext";
 
-const GridWrapper = styled.section<{ expanded: boolean }>`
-  padding: ${(props) => (props.expanded ? " 0 2.4rem 2.4rem  " : "0 1.3rem")};
+const GridWrapper = styled.section`
+  padding: 0 2rem 1rem;
   background: #1a1a1a;
   border-bottom: 1px solid #fff;
   border-left: 1px solid #fff;
@@ -28,15 +28,12 @@ const GridHeader = styled.header`
   transform: translatey(0.4rem);
 `;
 
-const Grid = styled.div<{ expanded: boolean }>`
+const Grid = styled.div`
   display: inline-grid;
   grid-template-columns: repeat(5, 1fr);
   grid-template-rows: 1fr;
   gap: 1.3rem;
-  margin-top: ${(props) => (props.expanded ? "1rem" : "0")};
-  max-height: ${(props) => (props.expanded ? "45rem" : "0px")};
-  overflow: hidden;
-  transition: all 0.3s ease-in-out;
+  margin-top: 1rem;
 
   @media screen and (min-width: 768px) {
     grid-template-columns: repeat(6, 1fr);
@@ -115,7 +112,7 @@ const CharacterSelection = () => {
   };
 
   return (
-    <GridWrapper expanded={selectionExpanded}>
+    <GridWrapper>
       <GridHeader>
         <GridHeading>Character Selection</GridHeading>
         <Toggle onClick={() => handleSelectionExpansion()}>
@@ -127,18 +124,20 @@ const CharacterSelection = () => {
         </Toggle>
       </GridHeader>
 
-      <Grid expanded={selectionExpanded}>
-        {characterIcons?.map((char, index) => (
-          <CharacterIcon
-            onClick={() => {
-              handleSelectedCharacter(char);
-              handleSelectionExpansion();
-            }}
-            key={index}
-            src={char?.imageIcon}
-          ></CharacterIcon>
-        ))}
-      </Grid>
+      {selectionExpanded ? (
+        <Grid>
+          {characterIcons?.map((char, index) => (
+            <CharacterIcon
+              onClick={() => {
+                handleSelectedCharacter(char);
+                handleSelectionExpansion();
+              }}
+              key={index}
+              src={char?.imageIcon}
+            ></CharacterIcon>
+          ))}
+        </Grid>
+      ) : null}
     </GridWrapper>
   );
 };
