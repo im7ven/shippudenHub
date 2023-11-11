@@ -3,7 +3,12 @@ import CharacterCard from "./components/CharacterCard";
 import CharacterSelection from "./components/CharacterSelection";
 
 export default async function Home() {
-  const res = await fetch("http://localhost:3000/api/characters");
+  if (!process.env.NEXT_PUBLIC_BASE_API_URL) {
+    return null;
+  }
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_BASE_API_URL}/api/characters`
+  );
   const characters: Character[] = await res.json();
   const initialCharacter = characters[0];
 
