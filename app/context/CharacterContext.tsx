@@ -28,6 +28,9 @@ export const CharacterContextProvider = ({ children }: Props) => {
   );
 
   const handleSelectedCharacter = (character: Character) => {
+    if (character === selectedCharacter) {
+      return;
+    }
     setAnimate(false); // Disable animation
     setTimeout(() => {
       setSelectedCharacter(character);
