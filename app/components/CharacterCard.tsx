@@ -25,14 +25,16 @@ const CardContainer = styled.section`
   padding: 3rem 0 0;
   box-shadow: 0 2px 5px 1px #1b1b1b;
   position: relative;
-  margin: 30rem auto;
+  margin: 30rem auto 15rem;
+  border: 1px solid white;
 
   @media screen and (min-width: 965px) {
-    margin: 10rem auto;
+    margin: 10rem auto 0;
     display: grid;
     grid-template-columns: 30% 70%;
     grid-template-rows: auto, auto;
     max-width: 60rem;
+    border: 0;
   }
 `;
 

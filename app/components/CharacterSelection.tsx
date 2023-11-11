@@ -37,7 +37,6 @@ const Grid = styled.div<{ expanded: boolean }>`
   max-height: ${(props) => (props.expanded ? "45rem" : "0px")};
   overflow: hidden;
   transition: all 0.3s ease-in-out;
-  padding: 0 0.5rem;
 
   @media screen and (min-width: 768px) {
     grid-template-columns: repeat(6, 1fr);
@@ -64,7 +63,7 @@ const CharacterIcon = styled.img`
 
   &:hover {
     box-shadow: 0 0 5px 1.5px #6200f5;
-    transform: scale(1.07);
+    transform: scale(0.9);
   }
 
   @media screen and (min-width: 768px) {
